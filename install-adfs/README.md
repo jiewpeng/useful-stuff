@@ -59,7 +59,7 @@ Add-KdsRootKey -EffectiveTime (Get-Date).AddHours(-10)
 New-ADServiceAccount FsGmsa -DNSHostName adfs1.contoso.com -ServicePrincipalNames http/adfs1.contoso.com
 ```
 1. We also need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx" /bin/bash`, and within it run:
-```
+```bash
 apt-get update && apt-get install -y openssl
 openssl genrsa -des3 -out /work/server.key 2048  # generate private key
 openssl req -new -key /work/server.key -sha256 -out /work/server.csr  # generate a certificate signing request, which is sent to a certification authority
