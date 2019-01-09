@@ -58,7 +58,7 @@ Now we should be able to use RSAT to add the FS role.
 Add-KdsRootKey -EffectiveTime (Get-Date).AddHours(-10)
 New-ADServiceAccount FsGmsa -DNSHostName adfs1.contoso.com -ServicePrincipalNames http/adfs1.contoso.com
 ```
-1. We also need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx" /bin/bash`, and within it run:
+2. We also need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx" /bin/bash`, and within it run:
 ```bash
 apt-get update && apt-get install -y openssl
 openssl genrsa -des3 -out /work/server.key 2048  # generate private key
@@ -88,7 +88,7 @@ DNS.1 = adfs1.contoso.com
 DNS.2 = enterpriseregistration.contoso.com
 DNS.3 = certauth.adsfs1.contoso.com
 ```
-1. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
+3. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
 
 ## Configuring the Federation Server
 
