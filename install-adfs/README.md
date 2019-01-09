@@ -66,9 +66,7 @@ openssl req -new -key /work/server.key -sha256 -out /work/server.csr  # generate
 openssl x509 -req -days 3650 -config /work/req.cnf -in /work/server.csr -signkey /work/server.key -sha256 -out /work/server.crt  # sign the certificate
 openssl pkcs12 -export -out /work/server.pfx -inkey /work/server.key -in /work/certificate.crt  # convert to pfx format
 ```
-
 Before that, we need to create a `req.cnf` file in the current directory on the host. What is important here is the CN, DNS.1 and DNS.2 lines.
-
 ```
 [req]
 distinguished_name = req_distinguished_name
