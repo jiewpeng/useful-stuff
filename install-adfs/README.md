@@ -19,7 +19,7 @@ We'll need to:
 After the server is installed, we need to set up the AD and add the AD role in the server. We'll need to run the following commands:
 
 ```powershell
-Get-WindowsFeature AD-Domain-Services | Install-WindowsFeature
+Get-WindowsFeature AD-Domain-Services | Install-WindowsFeature  # we can call the domain contoso.com for the purposes of this
 Import-Module ADDSDeployment
 Install-ADDSForest
 ```
