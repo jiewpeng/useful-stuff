@@ -53,16 +53,8 @@ Then add the server in the Server Manager. The Server Manager will try to connec
 
 Now we should be able to use RSAT to add the FS role.
 
-1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere and open Powershell inside it to run the following commands:
+1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file in the current directory **on the host**. What is important here is the CN, DNS.1 and DNS.2 lines.
 
-```powershell
-openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
-openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
-```
-
-Alternatively, you can also download [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) and use it.
-
-Before that, we need to create a `req.cnf` file in the current directory **on the host**. What is important here is the CN, DNS.1 and DNS.2 lines.
 ```
 [req]
 distinguished_name = req_distinguished_name
@@ -84,6 +76,14 @@ DNS.1 = adfs1.contoso.local
 DNS.2 = enterpriseregistration.contoso.local
 DNS.3 = certauth.adsfs1.contoso.local
 ```
+
+Then, open Powershell in this folder and run the following:
+
+```powershell
+openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
+openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
+```
+
 3. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
 
 ## Configuring the Federation Server
