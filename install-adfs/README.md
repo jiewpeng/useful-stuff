@@ -53,7 +53,7 @@ Then add the server in the Server Manager. The Server Manager will try to connec
 
 Now we should be able to use RSAT to add the FS role.
 
-1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file in the current directory **on the host**. What is important here is the CN, DNS.1 and DNS.2 lines.
+1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file. What is important here is the CN, DNS.1 and DNS.2 lines.
 
 ```
 [req]
