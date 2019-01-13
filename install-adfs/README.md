@@ -53,7 +53,7 @@ Then add the server in the Server Manager. The Server Manager will try to connec
 
 Now we should be able to use RSAT to add the FS role.
 
-1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file. What is important here is the CN, DNS.1 and DNS.2 lines.
+1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file with the following contents. What is important here is the CN, DNS.1 and DNS.2 lines.
 
 ```
 [req]
@@ -84,7 +84,7 @@ openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout s
 openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
 ```
 
-3. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
+2. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
 
 ## Configuring the Federation Server
 
