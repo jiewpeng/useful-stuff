@@ -53,14 +53,7 @@ Then add the server in the Server Manager. The Server Manager will try to connec
 
 Now we should be able to use RSAT to add the FS role.
 
-1. Before we can set up FS, we need to set up a service account for it (note that when searching for service account users, we need to append their name with a $ sign e.g. FsGmsa$):
-
-```powershell
-Add-KdsRootKey -EffectiveTime (Get-Date).AddHours(-10)
-New-ADServiceAccount FsGmsa -DNSHostName adfs1.contoso.local -ServicePrincipalNames http/adfs1.contoso.local
-```
-
-2. We also need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx /bin/bash`, and within it run:
+1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx /bin/bash`, and within it run:
 
 ```bash
 apt-get update && apt-get install -y openssl
