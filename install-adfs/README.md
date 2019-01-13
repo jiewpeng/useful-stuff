@@ -92,9 +92,9 @@ openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # conve
 2. On the Welcome page, select Create the first federation server in a federation server farm, and then click Next.
 3. On the Connect to AD FS page, specify an account with domain administrator rights (e.g. contoso\Administrator) for the contoso.local Active Directory domain that this computer is joined to, and then click Next. If the account doesn't have this rights, we can use the `Add-ADGroupMember ‘Domain Admins’ "CN=Administrator,CN=users,DC=contoso,DC=local"` command to add the account as a AD admin.
 4. On the Specify Service Properties page, do the following, and then click Next.
-  *  Import the SSL certificate that you have obtained earlier. This certificate is the required service authentication certificate. Browse to the location of your SSL certificate.
-  * To provide a name for your federation service, type adfs1.contoso.local. This value is the same value that you provided when you enrolled an SSL certificate in Active Directory Certificate Services (AD CS).
-  * To provide a display name for your federation service, type Contoso Corporation.
+    *  Import the SSL certificate that you have obtained earlier. This certificate is the required service authentication certificate. Browse to the location of your SSL certificate.
+    * To provide a name for your federation service, type adfs1.contoso.local. This value is the same value that you provided when you enrolled an SSL certificate in Active Directory Certificate Services (AD CS).
+    * To provide a display name for your federation service, type Contoso Corporation.
 5. On the Specify Service Account page, create a new service account called `contoso\fsgmsa`.
 6. On the Specify Configuration Database page, select Create a database on this server using Windows Internal Database, and then click Next all the way.
 7. In a Powershell, run the following on the server (when prompted for the service account, use `contoso\fsgmsa$`):
