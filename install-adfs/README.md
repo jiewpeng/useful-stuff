@@ -56,7 +56,7 @@ Now we should be able to use RSAT to add the FS role.
 1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere and open Powershell inside it to run the following commands:
 
 ```powershell
-openssl req -config req.conf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
+openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
 openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
 ```
 
