@@ -53,13 +53,15 @@ Then add the server in the Server Manager. The Server Manager will try to connec
 
 Now we should be able to use RSAT to add the FS role.
 
-1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a Docker container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx /bin/bash`, and within it run:
+1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. I would use a [Docker](https://www.docker.com/) container, install openssl on it and then use it from there. For example, we can launch a container using `docker run --rm -it -v "${PWD}:/work" nginx /bin/bash`, and within it run:
 
 ```bash
 apt-get update && apt-get install -y openssl
 openssl req -config /work/.conf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout /work/server.key -days 365 -out /work/server.crt
 openssl pkcs12 -export -out /work/server.pfx -inkey /work/server.key -in /work/server.crt  # convert to pfx format
 ```
+
+Alternatively, you can also download [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) and use it.
 
 Before that, we need to create a `req.cnf` file in the current directory **on the host**. What is important here is the CN, DNS.1 and DNS.2 lines.
 ```
