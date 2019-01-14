@@ -179,3 +179,5 @@ We'll need to do some further configuration of the IIS on the ADFS Server. We ca
 2.  Go to **Application Pools**, right-click **DefaultAppPool** to select **Advanced Settings**. Set **Load User Profile** to **True**, and then click **OK**.
 4.  Right-click **Default Web Site** to select **Edit Bindings**.
 5.  Add an **HTTPS** binding to port **443** with the SSL certificate that you have installed.
+
+If you have set all these up properly, you should be able to download the federation metadata at https://adfs1.contoso.com/federationmetadata/2007-06/federationmetadata.xml.
