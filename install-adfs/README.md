@@ -188,3 +188,20 @@ We'll need to do some further configuration of the IIS on the ADFS Server. We ca
 5.  Add an **HTTPS** binding to port **443** with the SSL certificate that you have installed.
 
 If you have set all these up properly, you should be able to download the federation metadata at https://adfs1.contoso.com/federationmetadata/2007-06/federationmetadata.xml.
+
+## (Unconfirmed) Configuring the ADFS Relying Party Trust
+
+We'll need to configure the trust between the ADFS and the application.
+
+1. Obtain the federation metadata from the application. The application should have some steps on how you can export the federation metadata.
+2. Copy the file to the VM. Suppose we have the file in `C:\Users\User\Downloads\appfedmetadata.xml` on the host machine. We can copy it into the VM using Powershell **on the host**:
+
+    ```powershell
+    Copy-VMFile "winserver" -SourcePath "C:\Users\User\Downloads\appfedmetadata.xml" -DestinationPath "C:\Temp\appfedmetadata.xml.xml" -CreateFullPath -FileSource Host
+    ```
+    
+3. Then we can add the relying party trust **on the guest/server** (replace the placeholder `name_of_relying_party` to whatever you have set - it must be the same between the ADFS and the application):
+
+    ```powershell
+    Add-ADFSRelyingPartyTrust -Name "{name_of_relying_party}" -MetadataFile "C:\Temp\appfedmetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");'
+    ```
