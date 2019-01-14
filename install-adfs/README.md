@@ -77,12 +77,12 @@ Now we should be able to use RSAT to add the FS role.
     DNS.3 = certauth.adsfs1.contoso.local
     ```
 
-Then, open Powershell in this folder and run the following:
+    Then, open Powershell in this folder and run the following:
 
-```powershell
-openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
-openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
-```
+    ```powershell
+    openssl req -config req.cnf -new -x509 -sha256 -newkey rsa:2048 -nodes -keyout server.key -days 365 -out server.crt
+    openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # convert to pfx format
+    ```
 
 2. Under All Servers, right click the VM and choose Add Roles and Features. Pretty simple, click next until we see the "Active Directory Federation Services", then choose that and follow the installation steps.
 
@@ -99,11 +99,11 @@ openssl pkcs12 -export -out server.pfx -inkey server.key -in server.crt  # conve
 6. On the Specify Configuration Database page, select Create a database on this server using Windows Internal Database, and then click Next all the way.
 7. In a Powershell, run the following on the server (when prompted for the service account, use `contoso\fsgmsa$`):
 
-```powershell
-Initialize-ADDeviceRegistration
-Enable-AdfsDeviceRegistration
-Set-AdfsGlobalAuthenticationPolicy -DeviceAuthenticationEnabled $true
-```
+    ```powershell
+    Initialize-ADDeviceRegistration
+    Enable-AdfsDeviceRegistration
+    Set-AdfsGlobalAuthenticationPolicy -DeviceAuthenticationEnabled $true
+    ```
 
 ## Exposing Ports on VM
 
@@ -111,40 +111,40 @@ We'll need to expose ports from the VM to enable these services to work. To do t
 
 1. Create a VM network switch
 
-On the **host**, run:
+    On the **host**, run:
 
-```powershell
-New-VMSwitch -SwitchName “NATSwitch” -SwitchType Internal
-New-NetIPAddress -IPAddress 192.168.0.1 -PrefixLength 24 -InterfaceAlias “vEthernet (NATSwitch)”
-New-NetNAT -Name “NATNetwork” -InternalIPInterfaceAddressPrefix 192.168.0.0/24
-```
+    ```powershell
+    New-VMSwitch -SwitchName “NATSwitch” -SwitchType Internal
+    New-NetIPAddress -IPAddress 192.168.0.1 -PrefixLength 24 -InterfaceAlias “vEthernet (NATSwitch)”
+    New-NetNAT -Name “NATNetwork” -InternalIPInterfaceAddressPrefix 192.168.0.0/24
+    ```
 
-To remove this network:
+    If we need to remove this network in the future, we can run this:
 
-```powershell
-Remove-NetNAT -Name “NATNetwork”
-Remove-NetIPAddress -IPAddress 192.168.0.1
-Remove-VMSwitch -VMSwitch “NATSwitch”
-```
+    ```powershell
+    Remove-NetNAT -Name “NATNetwork”
+    Remove-NetIPAddress -IPAddress 192.168.0.1
+    Remove-VMSwitch -VMSwitch “NATSwitch”
+    ```
 
 2. Shut down the VM, go to the VM Manager and change the network adapter to this new network switch.
 
 3. Configure the VM to use this new switch (replace 192.168.0.31 with whatever IP we want the guest machine to have), with a static IP
 
-On the **guest**:
+    On the **guest**:
 
-```powershell
-New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.0.31 -PrefixLength 24 -DefaultGateway 192.168.0.1
-Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "208.67.222.222,208.67.220.220"
-```
+    ```powershell
+    New-NetIPAddress -InterfaceAlias "Ethernet" -IPAddress 192.168.0.31 -PrefixLength 24 -DefaultGateway 192.168.0.1
+    Set-DnsClientServerAddress -InterfaceAlias "Ethernet" -ServerAddresses "208.67.222.222,208.67.220.220"
+    ```
 
 4. Open the ports required (replace 192.168.0.31 with the IP of the VM) e.g. port 80 for http, 443 for https, 389 for LDAP. On the **host**:
 
-```powershell
-Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 80 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 80 -NatName NATNetwork
-Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 443 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 443 -NatName NATNetwork
-Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 389 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 389 -NatName NATNetwork
-```
+    ```powershell
+    Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 80 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 80 -NatName NATNetwork
+    Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 443 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 443 -NatName NATNetwork
+    Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 389 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 389 -NatName NATNetwork
+    ```
 
 If you wish to remove these port mappings, use `Get-NetNatStaticMapping` to retrieve the list of network port mappings, and then `Remove-NetNatStaticMapping -StaticMappingID {mapping_id}` to remove the mapping.
 
