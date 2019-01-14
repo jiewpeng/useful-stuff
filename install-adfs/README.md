@@ -145,6 +145,13 @@ We'll need to expose ports from the VM to enable these services to work. To do t
     Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 443 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 443 -NatName NATNetwork
     Add-NetNatStaticMapping -ExternalIPAddress "0.0.0.0/24" -ExternalPort 389 -Protocol TCP -InternalIPAddress "192.168.0.31" -InternalPort 389 -NatName NATNetwork
     ```
+    
+5. You should also add the `contoso.local` domain into your hosts file so that your PC can resolve the domain to the IP of the VM. To do this, open Notepad as administrator on your host machine, and open the `C:\Windows\System32\drivers\etc\hosts` file. Add the following lines to the file:
+
+    ```
+    192.168.0.31        contoso.local
+    192.168.0.31        adfs1.contoso.local
+    ```
 
 If you wish to remove these port mappings, use `Get-NetNatStaticMapping` to retrieve the list of network port mappings, and then `Remove-NetNatStaticMapping -StaticMappingID {mapping_id}` to remove the mapping.
 
