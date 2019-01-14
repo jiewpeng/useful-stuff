@@ -175,8 +175,6 @@ Installing ADFS will also install the IIS role on the server. However, we cannot
 
 We'll need to do some further configuration of the IIS on the ADFS Server. We can use the remote connection to do it from our host.
 
-**Configure IIS Manager**
-
 1.  Open **Internet Information Services (IIS) Manager**, and expand the server connection.
 2.  Go to **Application Pools**, right-click **DefaultAppPool** to select **Advanced Settings**. Set **Load User Profile** to **True**, and then click **OK**.
 4.  Right-click **Default Web Site** to select **Edit Bindings**.
