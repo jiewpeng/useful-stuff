@@ -55,27 +55,27 @@ Now we should be able to use RSAT to add the FS role.
 
 1. We need an SSL cert because FS uses HTTPS to transport the claims. Since this is a lab environment, we can use openssl to do it. First, download and install [OpenSSL for Windows](https://slproweb.com/products/Win32OpenSSL.html) **on the host machine**. Then create a new folder somewhere. In this folder, you need to create a `req.cnf` file with the following contents. What is important here is the CN, DNS.1 and DNS.2 lines.
 
-```
-[req]
-distinguished_name = req_distinguished_name
-x509_extensions = v3_req
-prompt = no
-[req_distinguished_name]
-C = SG
-ST = SG
-L = Singapore
-O = MyCompany
-OU = MyDivision
-CN = adfs1.contoso.local
-[v3_req]
-keyUsage = critical, digitalSignature, keyAgreement
-extendedKeyUsage = serverAuth
-subjectAltName = @alt_names
-[alt_names]
-DNS.1 = adfs1.contoso.local
-DNS.2 = enterpriseregistration.contoso.local
-DNS.3 = certauth.adsfs1.contoso.local
-```
+    ```
+    [req]
+    distinguished_name = req_distinguished_name
+    x509_extensions = v3_req
+    prompt = no
+    [req_distinguished_name]
+    C = SG
+    ST = SG
+    L = Singapore
+    O = MyCompany
+    OU = MyDivision
+    CN = adfs1.contoso.local
+    [v3_req]
+    keyUsage = critical, digitalSignature, keyAgreement
+    extendedKeyUsage = serverAuth
+    subjectAltName = @alt_names
+    [alt_names]
+    DNS.1 = adfs1.contoso.local
+    DNS.2 = enterpriseregistration.contoso.local
+    DNS.3 = certauth.adsfs1.contoso.local
+    ```
 
 Then, open Powershell in this folder and run the following:
 
