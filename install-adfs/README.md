@@ -155,3 +155,18 @@ Get-ADUser -Server 192.168.0.31 -Filter * -Credential contoso\Administrator
 ```
 
 If we can search the AD, it means the connection works.
+
+## Configuring IIS on the ADFS Server
+
+Installing ADFS will also install the IIS role on the server. However, we cannot remotely administer it by default. To do this, we need to do the following:
+
+1. Ensure that IIS is installed on the host machine, so we can remotely administer the server. To do this, press start and search for `Turn Windows Features on or off`, and open it. Check `Internet Information Services`.
+2. We also need to install [IIS Manager for Remote Administration](https://www.iis.net/downloads/microsoft/iis-manager) on the host machine to remotely administer the server.
+3. Next, we need to enable remote administration on the server. To do this, we need to run the following in Powershell on the **guest**:
+    ```powershell
+    Install-WindowsFeature Web-Mgmt-Service
+    Set-ItemProperty -Path  HKLM:\SOFTWARE\Microsoft\WebManagement\Server -Name EnableRemoteManagement  -Value 1
+    Set-Service -name WMSVC  -StartupType Automatic
+    Start-service WMSVC
+    ```
+4. Then, we should be able to open up IIS Manager on the host machine, and click "File > Connect to a Server", and use the IP of the server (192.168.0.31) to connect to the server (use the `contoso\Administrator` account to log in). Ignore the warning of the certificate.
