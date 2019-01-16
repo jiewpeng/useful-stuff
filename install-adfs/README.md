@@ -203,8 +203,10 @@ We'll need to configure the trust between the ADFS and the application.
 3. Then we can add the relying party trust **on the guest/server** (replace the placeholder `name_of_relying_party` to whatever you have set - it must be the same between the ADFS and the application):
 
     ```powershell
-    Add-ADFSRelyingPartyTrust -Name "{name_of_relying_party}" -MetadataFile "C:\Temp\appfedmetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");' -SignatureAlgorithm 'https://www.w3.org/2000/09/xmldsig#rsa-sha1' 
+    Add-ADFSRelyingPartyTrust -Name "{name_of_relying_party}" -MetadataFile "C:\Temp\appfedmetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");' -SignatureAlgorithm 'http://www.w3.org/2000/09/xmldsig#rsa-sha1' 
     ```
+    
+    The `SignatureAlgorithm` parameter can be either 'http://www.w3.org/2000/09/xmldsig#rsa-sha1' or 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'
     
     If there is a need to remove this relying party trust later, we can run:
     
