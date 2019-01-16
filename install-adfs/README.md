@@ -206,6 +206,12 @@ We'll need to configure the trust between the ADFS and the application.
     Add-ADFSRelyingPartyTrust -Name "{name_of_relying_party}" -MetadataFile "C:\Temp\appfedmetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");' -SignatureAlgorithm 'https://www.w3.org/2000/09/xmldsig#rsa-sha1' 
     ```
     
+    If there is a need to remove this relying party trust later, we can run:
+    
+    ```powershell
+    Remove-AdfsRelyingPartyTrust -TargetName "{name_of_relying_party}"
+    ```
+    
 4. If the relying party application server is also some POC environment, then it likely has some self-signed cert as well which by default will be rejected by our server. We need to import it into our root CA. First, copy the cert from the host to the guest.
 
     On the **host** machine:
