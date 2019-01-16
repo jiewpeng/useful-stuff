@@ -197,11 +197,26 @@ We'll need to configure the trust between the ADFS and the application.
 2. Copy the file to the VM. Suppose we have the file in `C:\Users\User\Downloads\appfedmetadata.xml` on the host machine. We can copy it into the VM using Powershell **on the host**:
 
     ```powershell
-    Copy-VMFile "winserver" -SourcePath "C:\Users\User\Downloads\appfedmetadata.xml" -DestinationPath "C:\Temp\appfedmetadata.xml.xml" -CreateFullPath -FileSource Host
+    Copy-VMFile "winserver" -SourcePath "C:\Users\User\Downloads\appfedmetadata.xml" -DestinationPath "C:\Temp\appfedmetadata.xml" -CreateFullPath -FileSource Host -Force
     ```
     
 3. Then we can add the relying party trust **on the guest/server** (replace the placeholder `name_of_relying_party` to whatever you have set - it must be the same between the ADFS and the application):
 
     ```powershell
     Add-ADFSRelyingPartyTrust -Name "{name_of_relying_party}" -MetadataFile "C:\Temp\appfedmetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");' -SignatureAlgorithm 'https://www.w3.org/2000/09/xmldsig#rsa-sha1' 
+    ```
+    
+4. If the relying party application server is also some POC environment, then it likely has some self-signed cert as well which by default will be rejected by our server. We need to import it into our root CA. First, copy the cert from the host to the guest.
+
+    On the **host** machine:
+    ```powershell
+    Copy-VMFile "winserver" -SourcePath "C:\Users\User\Downloads\appserver.cer" -DestinationPath "C:\Temp\appserver.cer" -CreateFullPath -FileSource Host -Force
+    ```
+    Then on the **guest** machine:
+    ```powershell
+    Import-Certificate -FilePath "C:\Temp\appserver.cer" -CertStoreLocation cert:\LocalMachine\Root
+    ```
+    You may have to import it into the AdfsTrustedDevices as well:
+    ```powershell
+    Import-Certificate -FilePath "C:\Temp\appserver.cer" -CertStoreLocation cert:\LocalMachine\AdfsTrustedDevices
     ```
