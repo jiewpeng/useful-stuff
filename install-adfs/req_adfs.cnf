@@ -1,0 +1,19 @@
+[req]
+distinguished_name = req_distinguished_name
+x509_extensions = v3_req
+prompt = no
+[req_distinguished_name]
+C = SG
+ST = SG
+L = Singapore
+O = MyCompany
+OU = MyDivision
+CN = adfs1.contoso.local
+[v3_req]
+keyUsage = critical, digitalSignature, keyAgreement
+extendedKeyUsage = serverAuth
+subjectAltName = @alt_names
+[alt_names]
+DNS.1 = adfs1.contoso.local
+DNS.2 = enterpriseregistration.contoso.local
+DNS.3 = certauth.adsfs1.contoso.local
