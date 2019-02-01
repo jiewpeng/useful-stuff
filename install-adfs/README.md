@@ -228,3 +228,18 @@ We'll need to configure the trust between the ADFS and the application.
     ```powershell
     Import-Certificate -FilePath "C:\Temp\appserver.cer" -CertStoreLocation cert:\LocalMachine\AdfsTrustedDevices
     ```
+
+
+## Troubleshooting
+
+### Cannot find Server Manager after Installing RSAT
+
+It might be in `C:\ProgramData\Microsoft\Windows\StartMenu\Programs`
+
+### WinRM Authentication Error in Server Manager
+
+I haven't managed to solve this problem except by getting the computer with Server Manager to join the domain of the AD.
+
+1. Add the IP of the AD server as a DNS server (installing an AD will also install the DNS role), so the domain can be found through the DNS. This can be done by going to the Control Panel > Network and Internet > Network and Sharing Center > Change adapter settings > Right click the connection > select properties > Click on the IPv4 option and select Properties > Add the IP into the Preferred DNS Server
+2. Next, we need to join the domain. Click on start > type in "This PC", right click on it and select properties > Click Change Settings > Use the Network ID wizard and follow the instructions to join the domain.
+3. After this, we can add the server through the domain in Server Manager.
