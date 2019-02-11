@@ -229,6 +229,15 @@ We'll need to configure the trust between the ADFS and the application.
     Import-Certificate -FilePath "C:\Temp\appserver.cer" -CertStoreLocation cert:\LocalMachine\AdfsTrustedDevices
     ```
 
+## Setting up for Microstrategy
+
+This section describes the customised steps required to set up Microstrategy as the relying party for SAML authentication.
+
+- When setting up the ADFS Relying Party Trust, use the following instead:
+    ```powershell
+    Add-ADFSRelyingPartyTrust -Name "mstr" -MetadataFile "C:\Shares\defaultshare\SPMetadata.xml" -IssuanceAuthorizationRules '@RuleTemplate = "AllowAllAuthzRule" => issue(Type = "http://schemas.microsoft.com/authorization/claims/permit", Value = "true");' -IssuanceTransformRules 'c:[Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/windowsaccountname", Issuer == "AD AUTHORITY"] => issue(store = "Active Directory", types = ("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"), query = ";samAccountName;{0}", param = c.Value);' -SignatureAlgorithm 'http://www.w3.org/2000/09/xmldsig#rsa-sha1' 
+    ```
+    Microstrategy expects the NameID attribute to be returned in the SAML response, so we need to use the transform rules to map the sAMAccountName to the NameID attribute.
 
 ## Troubleshooting
 
